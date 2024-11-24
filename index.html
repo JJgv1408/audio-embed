@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproducción Automática de Audio</title>
+    <style>
+        /* Oculta el reproductor visual */
+        #player {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+        #play-pause-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor del reproductor de YouTube -->
+    <div id="player"></div>
+
+    <!-- Botón para reproducir/pausar manualmente -->
+    <button id="play-pause-btn">Pausar</button>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        var player;
+        var isPlaying = true;
+
+        // Inicializa el reproductor de YouTube
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', // Oculto
+                width: '0',  // Oculto
+                videoId: 'DOC9y16utXU', // ID del video de YouTube
+                playerVars: {
+                    'autoplay': 1, // Reproducción automática
+                    'mute': 1,     // Comienza silenciado
+                    'loop': 1,     // Se repite en bucle
+                    'playlist': 'DOC9y16utXU', // Necesario para el loop
+                    'rel': 0,      // No muestra videos relacionados
+                    'playsinline': 1 // Para dispositivos móviles
+                },
+                events: {
+                    'onReady': function(event) {
+                        event.target.playVideo(); // Reproduce al cargar
+                    }
+                }
+            });
+        }
+
+        // Control del botón para pausar/reanudar
+        document.getElementById('play-pause-btn').addEventListener('click', function() {
+            if (isPlaying) {
+                player.pauseVideo();
+                this.textContent = 'Reproducir';
+            } else {
+                player.playVideo();
+                this.textContent = 'Pausar';
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
+</body>
+</html>
